@@ -26,7 +26,7 @@ def edit():
         _action=URL('experiments', 'default', 'edit')
     )
 
-    if form.process().accepted:
+    if form.process(session=application.session).accepted:
         redirect(URL())
 
     return {'form': form}
@@ -38,7 +38,7 @@ def contact():
     db = application.db(models=[Contact])
     form = SQLFORM(db.Contact, _action=URL('experiments', 'default', 'contact'))
 
-    if form.process().accepted:
+    if form.process(session=application.session).accepted:
         redirect(URL())
 
     return {'form': form}

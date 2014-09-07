@@ -16,13 +16,16 @@ sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..', 'modules')))
 web2py_path = os.path.abspath(os.path.join(os.getcwd(), '..', '..', '..'))
 sys.path.append(web2py_path)
 
+# setup the application controllers path
+sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..', 'controllers')))
+
 # setup a very basic environment
 from gluon import current
 from gluon.globals import Request, Session, Response
 from gluon.storage import Storage
 
 current.T = lambda t: t
-current.request = Request()
+current.request = Request(dict())
 current.session = Session()
 current.response = Response()
 
@@ -42,7 +45,7 @@ application = Application(config=Storage(
     upload_folder=os.path.join(os.getcwd(), 'uploads')
 ))
 
-from controllers import default_test, admin_test
+from test_controllers import default_test, admin_test
 
 logging.config.fileConfig('logging.conf')
 

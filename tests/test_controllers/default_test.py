@@ -1,10 +1,9 @@
-
 import unittest
 from gluon import current
 from gluon.storage import Storage
 from gluon.sqlhtml import SQLFORM
 from gluon.http import HTTP
-from applications.experiments.controllers import default
+from controllers import default
 
 
 class DefaultTest(unittest.TestCase):
@@ -22,6 +21,7 @@ class DefaultTest(unittest.TestCase):
         self.request.application = 'web2py_unit_test'
         self.request.post_vars = Storage()
         self.request.get_vars = Storage()
+        self.application.session.clear()
 
     def test_index(self):
         """
@@ -41,7 +41,7 @@ class DefaultTest(unittest.TestCase):
 
         get_response = default.edit()
 
-        self.request.post_vars = Storage({
+        self.request._post_vars = Storage({
             '_formkey': get_response['form'].formkey,
             '_formname': get_response['form'].formname
         })
@@ -58,7 +58,7 @@ class DefaultTest(unittest.TestCase):
         get_response = default.edit()
 
         self.request.function = 'edit'
-        self.request.post_vars = Storage({
+        self.request._post_vars = Storage({
             'first_name': 'Test',
             'last_name': 'User',
             '_formkey': get_response['form'].formkey,
@@ -77,7 +77,7 @@ class DefaultTest(unittest.TestCase):
     def test_contact_empty_form(self):
         get_response = default.contact()
 
-        self.request.post_vars = Storage({
+        self.request._post_vars = Storage({
             '_formkey': get_response['form'].formkey,
             '_formname': get_response['form'].formname
         })
@@ -93,7 +93,7 @@ class DefaultTest(unittest.TestCase):
         get_response = default.contact()
 
         self.request.function = 'edit'
-        self.request.post_vars = Storage({
+        self.request._post_vars = Storage({
             'first_name': 'Test',
             'last_name': 'User',
             'email': 'test@test.com',

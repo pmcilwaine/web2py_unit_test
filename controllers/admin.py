@@ -4,7 +4,7 @@ This file is an attempt to demonstrate how to unit test
 with authentication
 """
 
-from applications.experiments.modules.app import Application, Account
+from app import Application, Account
 from gluon import current
 from gluon.sqlhtml import SQLFORM
 from gluon.dal import Field
@@ -66,5 +66,7 @@ def myform():
     def onvalidation(form):
         pass
 
-    if form.process(onvaliidation=onvalidation).accepted:
+    if form.process(session=application.session, onvaliidation=onvalidation).accepted:
         redirect(URL())
+
+    return dict(form=form)

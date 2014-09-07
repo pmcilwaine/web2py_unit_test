@@ -4,7 +4,7 @@ from gluon.http import HTTP
 from gluon.storage import Storage
 from app import Account
 from helpers.tools import upload
-from applications.experiments.controllers import admin
+from controllers import admin
 import os
 import logging
 
@@ -104,15 +104,14 @@ class AdminTest(unittest.TestCase):
         get_response = admin.file_upload()
 
         self.request.function = 'edit'
-        self.request.post_vars = Storage({
-            'file': None,
+        self.request._post_vars = Storage({
             '_formkey': get_response['form'].formkey,
             '_formname': get_response['form'].formname
         })
 
         try:
             errors = admin.file_upload()['form'].errors
-            self.assertEqual(errors.file, 'invalid image')
+            self.assertEqual(errors.file, 'Invalid image')
         except Exception as e:
             self.fail(('Unexpected exception thrown', e))
 
@@ -120,7 +119,7 @@ class AdminTest(unittest.TestCase):
         get_response = admin.file_upload()
 
         self.request.function = 'edit'
-        self.request.post_vars = Storage({
+        self.request._post_vars = Storage({
             'file': upload('file', 'icon_world.jpg'),
             '_formkey': get_response['form'].formkey,
             '_formname': get_response['form'].formname
@@ -175,13 +174,13 @@ Subject: Another subject
         doing a simulated get request to start off with.
         """
 
-        self.session['_formkey[no_table/create]'] = 'abc'
+        resp = admin.myform()
         self.request.function = 'edit'
-        self.request.post_vars = Storage({
+        self.request._post_vars = Storage({
             'first_name': 'Test',
             'last_name': 'User',
-            '_formkey': 'abc',
-            '_formname': 'no_table/create'
+            '_formkey': resp['form'].formkey,
+            '_formname': resp['form'].formname
         })
 
         try:
